@@ -1,0 +1,38 @@
+<launch>
+    <!-- load robot -->
+  <param command="$(find xacro)/xacro --inorder $(find sia10f_description)/urdf/sia10f.gazebo.xacro" name="robot_description"/>
+  
+    <!-- add tf which provide frames -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <!-- add to gazebo -->
+  <node args="-param robot_description -urdf -model my_robot" name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+  <rosparam command="load" file="$(find sia10f_description)/config/joints.yaml" />
+  
+  <group ns="sia10f">
+  <!-- Spawn controllers -->
+  <node name="bot_controller"
+        pkg="controller_manager"
+        type="spawner"
+        ns="sia10f"
+        args="joint_state_controller
+              joint_s_controller
+              joint_e_controller
+              joint_l_controller
+              joint_u_controller
+              joint_r_controller
+              joint_b_controller
+              joint_t_controller"
+              />
+    </group>
+
+</launch>
