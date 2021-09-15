@@ -1,0 +1,20 @@
+<launch>
+    <!-- load model to rviz -->
+  <param command="$(find xacro)/xacro --inorder $(find my_robot_description)/urdf/my_robot.xacro" name="robot_description"/>
+  <!-- <node name="rviz" pkg="rviz" type="rviz" if="true" /> -->
+
+    <!-- add tf which provide frames -->
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" />
+
+    <!-- add to gazebo -->
+  <node args="-param robot_description -urdf -model my_robot" name="spawn_urdf" pkg="gazebo_ros" type="spawn_model"/>
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+
+</launch>

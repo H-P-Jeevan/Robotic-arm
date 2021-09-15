@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<robot name="my_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+<!-- load robotic arm -->
+<xacro:include filename="$(find sia10f_description)/urdf/sia10f_macro.xacro" />
+<xacro:motoman_sia10f prefix="" />
+
+<!-- create links -->
+<link name="world"/>
+<link name="camera_frame"/>
+
+<link name="table">
+  <visual>
+    <geometry>
+      <box size="1 1 0.05"/>
+    </geometry>
+  </visual>
+  <collision>
+    <geometry> 
+      <box size="1 1 0.05"/>
+    </geometry>
+  </collision>
+</link>
+
+<!-- add joints -->
+<joint name="world_to_table" type="fixed">
+    <origin xyz="0 0 0.5" rpy="0 0 0"/>
+    <parent link="world"/>
+    <child link="table"/>
+</joint>
+
+<joint name="world_to_camera" type="fixed">
+    <origin xyz="0 0 1.0" rpy="0 1.571 0"/>
+    <parent link="world"/>
+    <child link="camera_frame"/>
+</joint>
+
+<joint name="table_to_robot" type="fixed">
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <parent link="table"/>
+    <child link="base_link"/>
+</joint>
+
+</robot>
